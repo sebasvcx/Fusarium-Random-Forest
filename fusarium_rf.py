@@ -88,3 +88,17 @@ print("\n--- PREDICCIÓN ZONA NUEVA ---")
 print(f"pH: 5.2 | Humedad suelo: 80% | Temperatura: 28.5°C")
 print(f"Resultado: {'🔴 INFECTADA' if prediccion == 1 else '🟢 SANA'}")
 print(f"Probabilidad de infección: {probabilidad[1]*100:.1f}%")
+
+# Matriz de confusión
+cm = confusion_matrix(y_test, y_pred)
+
+plt.figure(figsize=(6, 5))
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
+            xticklabels=['Sano', 'Infectado'],
+            yticklabels=['Sano', 'Infectado'])
+plt.title('Matriz de Confusión - Fusarium TR4')
+plt.ylabel('Real')
+plt.xlabel('Predicción')
+plt.tight_layout()
+plt.savefig('confusion_matrix.png')
+plt.show()
