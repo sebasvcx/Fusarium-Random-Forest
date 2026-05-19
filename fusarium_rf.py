@@ -102,3 +102,20 @@ plt.xlabel('Predicción')
 plt.tight_layout()
 plt.savefig('confusion_matrix.png')
 plt.show()
+
+# Visualizar uno de los árboles del bosque
+from sklearn.tree import export_graphviz
+import subprocess
+
+arbol = modelo.estimators_[0]  # primer árbol del bosque
+
+export_graphviz(arbol,
+    out_file='arbol.dot',
+    feature_names=X.columns,
+    class_names=['Sano', 'Infectado'],
+    filled=True,
+    rounded=True,
+    max_depth=3)  # solo 3 niveles para que sea legible
+
+subprocess.run(['dot', '-Tpng', 'arbol.dot', '-o', 'arbol.png'])
+print("Árbol guardado como arbol.png")
