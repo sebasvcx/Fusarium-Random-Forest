@@ -55,27 +55,104 @@ El modelo alcanza un **97% de accuracy** sobre datos de prueba.
 
 La **temperatura**, **humedad del suelo** y **pH** son los factores más determinantes para la detección del hongo, resultado consistente con la biología del TR4, que prospera en suelos cálidos, húmedos y ácidos.
 
+### Matriz de confusión
+
+![Matriz de Confusión](confusion_matrix.png)
+
+### Árbol de decisión (primer árbol del bosque)
+
+![Árbol de decisión](arbol.png)
+
+---
+
+## Requisitos
+
+| Tipo | Paquete / herramienta |
+|---|---|
+| **Python** | 3.10 o superior |
+| **pip** (Python) | Ver `requirements.txt` |
+| **Sistema** | [Graphviz](https://graphviz.org/) — necesario para exportar el árbol a `arbol.png` |
+
+> **Nota:** Graphviz no se instala con `pip`. Es un programa del sistema cuyo comando `dot` usa el script al final de la ejecución.
+
 ---
 
 ## Cómo ejecutarlo
 
 ### 1. Clonar el repositorio
+
 ```bash
 git clone https://github.com/sebasvcx/Fusarium-Random-Forest.git
 cd Fusarium-Random-Forest
 ```
 
-### 2. Crear entorno virtual e instalar dependencias
+### 2. Crear entorno virtual e instalar dependencias de Python
+
+#### macOS
+
 ```bash
 python3 -m venv venv
 source venv/bin/activate
-pip install scikit-learn pandas matplotlib seaborn
+pip install -r requirements.txt
 ```
 
-### 3. Ejecutar
+Instalar Graphviz (elige una opción):
+
 ```bash
-python3 fusarium_rf.py
+# Con Homebrew (recomendado)
+brew install graphviz
 ```
+
+#### Windows
+
+En **PowerShell** o **CMD**:
+
+```powershell
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+Instalar Graphviz (elige una opción):
+
+- **Con winget:** `winget install Graphviz.Graphviz`
+- **Con Chocolatey:** `choco install graphviz`
+- **Manual:** descarga el instalador desde [graphviz.org/download](https://graphviz.org/download/) y reinicia la terminal
+
+Después de instalar Graphviz en Windows, verifica que el comando funcione:
+
+```powershell
+dot -V
+```
+
+Si `dot` no se reconoce, agrega la carpeta `bin` de Graphviz al **PATH** del sistema (suele ser `C:\Program Files\Graphviz\bin`).
+
+### 3. Ejecutar el script
+
+Con el entorno virtual **activado**:
+
+| Sistema | Comando |
+|---|---|
+| **macOS** | `python3 fusarium_rf.py` |
+| **Windows** | `python fusarium_rf.py` |
+
+### 4. Salida esperada
+
+Al terminar, el script muestra en consola:
+
+- Muestra de los datos simulados
+- Reporte de clasificación (precision, recall, F1)
+- Importancia de cada sensor
+- Predicción de una zona nueva de ejemplo
+
+Y genera estos archivos en la carpeta del proyecto:
+
+| Archivo | Descripción |
+|---|---|
+| `feature_importance.png` | Barras de importancia por sensor |
+| `confusion_matrix.png` | Matriz de confusión del modelo |
+| `arbol.dot` | Definición del árbol en formato Graphviz |
+| `arbol.png` | Visualización del primer árbol del bosque |
 
 ---
 
@@ -83,8 +160,12 @@ python3 fusarium_rf.py
 
 ```
 Fusarium-Random-Forest/
-├── fusarium_rf.py          # Código principal
-├── feature_importance.png  # Gráfica de importancia de sensores
+├── fusarium_rf.py           # Código principal
+├── requirements.txt         # Dependencias de Python
+├── feature_importance.png   # Gráfica de importancia de sensores
+├── confusion_matrix.png     # Matriz de confusión
+├── arbol.dot                # Árbol en formato Graphviz (generado al ejecutar)
+├── arbol.png                # Visualización del árbol (generado al ejecutar)
 └── README.md
 ```
 
@@ -93,10 +174,23 @@ Fusarium-Random-Forest/
 ## Tecnologías
 
 - Python 3.x
-- scikit-learn 1.8
-- pandas 3.0
-- matplotlib 3.10
-- seaborn 0.13
+- NumPy
+- pandas
+- scikit-learn
+- matplotlib
+- seaborn
+- Graphviz (exportación del árbol de decisión)
+
+---
+
+## Solución de problemas
+
+| Problema | Solución |
+|---|---|
+| `python` o `python3` no encontrado | Instala Python desde [python.org](https://www.python.org/downloads/). En Windows, marca **"Add Python to PATH"** durante la instalación. |
+| `dot: command not found` | Instala Graphviz (ver paso 2) y reinicia la terminal. |
+| Las ventanas de gráficas no aparecen | Es normal si usas un entorno sin pantalla; los archivos `.png` se guardan igual en la carpeta del proyecto. |
+| Error al activar `venv` en Windows | Ejecuta `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` en PowerShell (solo una vez) y vuelve a activar con `venv\Scripts\activate`. |
 
 ---
 
